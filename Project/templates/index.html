@@ -2,6 +2,15 @@
 
 {% block content %}
     <h1 class="title">{% block title %} Welcome to The Image Marketplace {% endblock %}</h1>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class=flashes>
+        {% for message in messages %}
+          <h1 style="background-color: red;">{{ message }}</h1>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
     {% for post in posts %}
         <a href="{{ url_for('main.post', image_id=post.imageId) }}">
             <h2 class="title">{{ post.imageName }}</h2>

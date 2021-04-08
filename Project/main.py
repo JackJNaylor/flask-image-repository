@@ -154,14 +154,12 @@ def edit(image_id):
 def order(image_id):
     image = get_image(image_id)
     quantity = request.form.get('quantity')
-    oldprice = float(quantity) * float(image.unitPrice)
-    price = round(oldprice, 2)
-    sellerId = image.userId
-
     if not quantity:
-        flash('Quantity is required!')
-
+        flash('Order Not Placed, Quantity Is Required!')
     else:
+        oldprice = float(quantity) * float(image.unitPrice)
+        price = round(oldprice, 2)
+        sellerId = image.userId
         newImage = db.session.query(Images).filter(Images.imageId == image_id).one()
         oldInventory = newImage.inventory
         newInventory = int(oldInventory) - int(quantity)
@@ -172,6 +170,7 @@ def order(image_id):
         db.session.add(new_order)
         db.session.commit()
         return redirect(url_for('main.index'))
+    return redirect(url_for('main.index'))
 
 
 @main.route('/outgoing/<int:order_id>', methods=['POST'])
