@@ -40,7 +40,7 @@
         <button type="submit" class="btn btn-primary">Update</button>
     </div>
 </form>
-<form>
+<form method="post" action="{{ url_for('main.delete_image', image_id=post.imageId) }}">
     <div>
         <button type="submit" class="btn btn-primary">Delete Image</button>
     </div>

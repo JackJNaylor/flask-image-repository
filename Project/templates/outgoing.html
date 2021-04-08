@@ -4,6 +4,15 @@
 <h1 class="title">
   {{ name }}'s Outgoing Orders
 </h1>
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <h1 style="background-color: red;">{{ message }}</h1>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
 {% for post in posts %}
 <!--        <a href="{{ url_for('main.orders', order_id=post.orderId) }}">-->
 <!--            <h2 class="title">{{ post.imageName }}</h2>-->
@@ -19,6 +28,11 @@
                     <form method="post" action="{{ url_for('main.update_status', order_id=post.orderId) }}">
                         <input type="text" name="status" value="{{ post.status }}">
                         <button type="submit" class="btn btn-primary">Update Order Status</button>
+                    </form>
+                </div>
+                <div>
+                    <form method="post" action="{{ url_for('main.complete_order', order_id=post.orderId) }}">
+                        <button type="submit" class="btn btn-primary">Complete Order</button>
                     </form>
                 </div>
             </div>

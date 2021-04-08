@@ -7,7 +7,7 @@
 {% for post in posts %}
             <div>
                 <p>Order ID: {{ post['orderId'] }}</p>
-                <a href="{{ url_for('main.post', image_id=post.imageId) }}">Image ID: {{ post.imageId }} </a>
+                <p>Image ID: {{ post.imageId }} </p>
                 <p>Quantity: {{ post['quantity'] }}</p>
                 <p>Order Total: ${{ post['price'] }}</p>
                 <p>Quantity: {{ post['quantity'] }}</p>

@@ -5,7 +5,7 @@ import os
 import base64
 from . import db
 from .models import Images, Orders
-from sqlalchemy import and_
+from sqlalchemy import and_, desc, asc
 
 
 main = Blueprint('main', __name__)
@@ -83,18 +83,18 @@ def edit_image(image_id):
 @main.route('/orders')
 @login_required
 def orders():
-    orders = db.session.query(Orders).filter_by(buyerId=current_user.id)
+    orders = db.session.query(Orders).filter_by(buyerId=current_user.id).order_by(Orders.complete)
     return render_template('orders.html', name=current_user.name, posts=orders)
 
 
 @main.route('/outgoing')
 @login_required
 def outgoing():
-    outgoing_orders = db.session.query(Orders).filter_by(sellerId=current_user.id)
+    outgoing_orders = db.session.query(Orders).filter_by(sellerId=current_user.id, complete=False)
     return render_template('outgoing.html', name=current_user.name, posts=outgoing_orders)
 
 
-# API Calls
+# Controllers/API Calls
 @main.route('/api/image/upload', methods=['POST'])
 @login_required
 def upload():
@@ -149,7 +149,7 @@ def edit(image_id):
         return redirect(url_for('main.index'))
 
 
-@main.route('/order/<int:image_id>', methods=['POST'])
+@main.route('/api/order/<int:image_id>', methods=['POST'])
 @login_required
 def order(image_id):
     image = get_image(image_id)
@@ -173,7 +173,7 @@ def order(image_id):
     return redirect(url_for('main.index'))
 
 
-@main.route('/outgoing/<int:order_id>', methods=['POST'])
+@main.route('/api/outgoing/<int:order_id>', methods=['POST'])
 @login_required
 def update_status(order_id):
     order = get_order(order_id)
@@ -190,3 +190,32 @@ def update_status(order_id):
         db.session.commit()
         return redirect(url_for('main.outgoing'))
 
+
+@main.route('/api/outgoing/complete/<int:order_id>', methods=['POST'])
+@login_required
+def complete_order(order_id):
+    order_check = get_order(order_id)
+    if current_user.id != order_check.sellerId:
+        return redirect(url_for('main.index'))
+    else:
+        order = db.session.query(Orders).filter(Orders.orderId == order_id).one()
+        order.status = "Order has been completed"
+        order.complete = True
+        db.session.commit()
+        return redirect(url_for('main.outgoing'))
+
+
+@main.route('/api/delete/image/<int:image_id>', methods=['POST'])
+@login_required
+def delete_image(image_id):
+    image_check = get_image(image_id)
+    if current_user.id != image_check.userId:
+        return redirect(url_for('main.index'))
+    else:
+        order = db.session.query(Orders).filter(and_(Orders.imageId == image_id, Orders.complete is False)).first()
+        if order:
+            flash("Cannot delete Image with outstanding orders")
+            return redirect(url_for('main.outgoing'))
+        db.session.delete(image_check)
+        db.session.commit()
+        return redirect(url_for('main.index'))

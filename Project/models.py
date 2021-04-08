@@ -35,11 +35,13 @@ class Orders(db.Model):
     status = db.Column(db.String(100))
     price = db.Column(db.Integer)
     quantity = db.Column(db.Integer)
+    complete = db.Column(db.Boolean, default=False)
     imageId = db.Column(db.Integer, ForeignKey('images.imageId'))
     buyerId = db.Column(db.Integer, ForeignKey('user.id'))
     sellerId = db.Column(db.Integer, ForeignKey('user.id'))
     buyer = relationship("User", foreign_keys=[buyerId])
     seller = relationship("User", foreign_keys=[sellerId])
+
 
 
 
