@@ -3,6 +3,15 @@
 ### By Jack Naylor
 
 ### How to Run
+Navigate to the directory ShopifyImageRepo2021. Run these commands in this order.
+python3 -m venv auth
+source auth/bin/activate
+pip install flask flask-sqlalchemy flask-login
+export FLASK_APP=Project
+export FLASK_DEBUG=1
+flask run
+
+The application should be available to view in a web browser at the given address, usually http://127.0.0.1:5000/ .
 
 
 ### How to Use
