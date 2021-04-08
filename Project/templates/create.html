@@ -3,7 +3,7 @@
 {% block content %}
 <h1 class="title">{% block title %} Upload a New Image {% endblock %}</h1>
 
-<form method="post" enctype="multipart/form-data" action="/create">
+<form method="post" enctype="multipart/form-data" action="/api/image/upload">
     <div class="form-group">
         <label for="imageName">Image Title</label>
         <input type="text" name="imageName" id="imageName"

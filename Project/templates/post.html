@@ -18,7 +18,7 @@
     </div>
     {% endif %}
     {% if current_user.id == post.userId %}
-    <form action="{{ url_for('main.edit', image_id=post.imageId) }}">
+    <form action="{{ url_for('main.edit_image', image_id=post.imageId) }}">
         <input type="submit" value="Edit" />
     </form>
     {% endif %}
