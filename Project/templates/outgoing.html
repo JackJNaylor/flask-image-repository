@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="title">
+  {{ name }}'s Outgoing Orders
+</h1>
+{% for post in posts %}
+<!--        <a href="{{ url_for('main.orders', order_id=post.orderId) }}">-->
+<!--            <h2 class="title">{{ post.imageName }}</h2>-->
+
+<!--        </a>-->
+            <div>
+                <p>Order ID: {{ post['orderId'] }}</p>
+                <a href="{{ url_for('main.post', image_id=post.imageId) }}">Image ID: {{ post.imageId }} </a>
+                <p>Quantity: {{ post['quantity'] }}</p>
+                <p>Order Total: ${{ post['price'] }}</p>
+                <p>Quantity: {{ post['quantity'] }}</p>
+                <div>
+                    <form method="post" action="{{ url_for('main.update_status', order_id=post.orderId) }}">
+                        <input type="text" name="status" value="{{ post.status }}">
+                        <button type="submit" class="btn btn-primary">Update Order Status</button>
+                    </form>
+                </div>
+            </div>
+            <!--        <span class="badge badge-primary">{{ post['created'] }}</span>-->
+<!--        <a href="{{ url_for('main.edit', image_id=post.imageId) }}">-->
+<!--            <span class="badge badge-warning">Edit</span>-->
+<!--        </a>-->
+        <hr>
+    {% endfor %}
+{% endblock %}

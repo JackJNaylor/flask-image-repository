@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2 class="title">{% block title %} {{ post['imageName'] }} {% endblock %}</h2>
+<!--    <span class="badge badge-primary">{{ post['created'] }}</span>-->
+    <img src="data:image/jpeg;base64,{{ post.data.decode('ascii') }}" style="height:50%; width:50%">
+    <p>Price per Image: ${{ post['unitPrice'] }}</p>
+    <p>Units Available: {{ post['inventory'] }}</p>
+    <p>{{ post['description'] }}</p>
+    {% if current_user.id != post.userId %}
+    <div>
+        <form method="post" action="{{ url_for('main.order', image_id=post.imageId) }}">
+            <label for="quantity">Quantity</label>
+            <input name="quantity" id="quantity" type="number" min="1" max="{{ post['inventory'] }}"
+                      class="form-control" size="6" step="1">{{ request.form['inventory'] }}</input>
+            <button type="submit" class="btn btn-primary">Place Order</button>
+        </form>
+    </div>
+    {% endif %}
+    {% if current_user.id == post.userId %}
+    <form action="{{ url_for('main.edit', image_id=post.imageId) }}">
+        <input type="submit" value="Edit" />
+    </form>
+    {% endif %}
+{% endblock %}

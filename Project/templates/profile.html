@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="title">
+  Welcome, {{ name }}!
+</h1>
+<h2 class="title">
+    Your Total Revenue is {{ revenue }}
+</h2>
+<h2 class="title">
+    Your Uploaded Images
+</h2>
+{% for post in posts %}
+        <a href="{{ url_for('main.post', image_id=post.imageId) }}">
+            <h2 class="title">{{ post.imageName }}</h2>
+
+            <img href="{{ url_for('main.post', image_id=post.imageId) }}" src="data:image/jpeg;base64,{{ post.data.decode('ascii') }}" style="height:30%; width:30%">
+        </a>
+
+        <hr>
+    {% endfor %}
+{% endblock %}

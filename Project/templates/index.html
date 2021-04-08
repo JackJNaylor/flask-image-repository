@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1 class="title">{% block title %} Welcome to The Image Marketplace {% endblock %}</h1>
+    {% for post in posts %}
+        <a href="{{ url_for('main.post', image_id=post.imageId) }}">
+            <h2 class="title">{{ post.imageName }}</h2>
+
+            <img href="{{ url_for('main.post', image_id=post.imageId) }}" src="data:image/jpeg;base64,{{ post.data.decode('ascii') }}" style="height:30%; width:30%">
+        </a>
+        <p>Price per Image: ${{ post['unitPrice'] }}</p>
+        <p>Units Available: {{ post['inventory'] }}</p>
+        {% if current_user.id != post.userId %}
+        <div>
+            <form method="post" action="{{ url_for('main.order', image_id=post.imageId) }}">
+                <label for="quantity">Quantity</label>
+                <input name="quantity" id="quantity" type="number" min="1" max="{{ post['inventory'] }}"
+                          class="form-control" size="6" step="1">{{ request.form['inventory'] }}</input>
+                <button type="submit" class="btn btn-primary">Place Order</button>
+            </form>
+        </div>
+        {% endif %}
+        <hr>
+    {% endfor %}
+{% endblock %}

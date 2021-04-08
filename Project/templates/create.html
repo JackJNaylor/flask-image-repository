@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="title">{% block title %} Upload a New Image {% endblock %}</h1>
+
+<form method="post" enctype="multipart/form-data" action="/create">
+    <div class="form-group">
+        <label for="imageName">Image Title</label>
+        <input type="text" name="imageName" id="imageName"
+               placeholder="Image Title" class="form-control"
+               value="{{ request.form['title'] }}"></input>
+    </div>
+    <div class="form-group">
+        <p>File: <input type = "file" name = "data"/></p>
+    </div>
+    <div>
+        <label for="unitPrice">Image Price (CAD)</label>
+        <input name="unitPrice" id="unitPrice" type="number" min="0.99" max="1000"
+                  class="form-control" size="6">{{ request.form['unitPrice'] }}</input>
+    </div>
+    <div>
+        <label for="inventory">Total Inventory</label>
+        <input name="inventory" id="inventory" type="number" min="1" max="1000"
+                  class="form-control" size="6" step="1">{{ request.form['inventory'] }}</input>
+    </div>
+    <div class="form-group">
+        <label for="description">Description</label>
+    </div>
+    <textarea name="description" id="description" placeholder="Image Description"
+                  class="form-control" style="height:50%; width:50%">{{ request.form['content'] }}</textarea>
+    <div class="field">
+        <label class="checkbox">
+            <input type="checkbox" name="private">
+            Private (Only You Can See The Image)
+        </label>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Upload</button>
+    </div>
+</form>
+{% endblock %}
